@@ -4,6 +4,7 @@ const cors = require("cors");
 require("dotenv").config;
 
 const user = require("./routes/user");
+const login = require("./routes/login");
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -13,6 +14,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/user", user);
+app.use(login);
+
 app.get("/", (req, res) => {
   console.log("hihi");
   return res.json({ msg: "hello world" });
