@@ -4,6 +4,7 @@ const cors = require("cors");
 require("dotenv").config;
 
 const user = require("./routes/user");
+const products = require("./routes/product");
 const login = require("./routes/login");
 
 const PORT = process.env.PORT || 3000;
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use("/product", products);
 app.use("/user", user);
 app.use(login);
 
