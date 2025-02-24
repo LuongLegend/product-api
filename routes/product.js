@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { getProducts, getProductById } = require("../controllers/product");
+const {
+  getProducts,
+  getProductById,
+  addProduct,
+} = require("../controllers/product");
 
 router.get("/", async (req, res) => {
   try {
@@ -22,6 +26,20 @@ router.get("/:id", async (req, res) => {
     const { id } = req.params;
     const products = await getProductById(id);
     if (products.code === 200) return res.json({ data: products.data });
+    return res.status(500).json({
+      msg: "something wrong",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(503).json("loi roi");
+  }
+});
+
+router.post("/", async (req, res) => {
+  try {
+    const data = req.body;
+    const product = await addProduct(data);
+    if (product.code === 200) return res.json({ data: product.data });
     return res.status(500).json({
       msg: "something wrong",
     });

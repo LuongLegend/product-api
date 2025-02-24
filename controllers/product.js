@@ -6,6 +6,7 @@ const {
   category,
   productCategory,
 } = require("../models/index");
+const { returnSuccess, returnError } = require("./config");
 
 const getProducts = async (query) => {
   try {
@@ -81,36 +82,67 @@ const getProducts = async (query) => {
       offset,
     });
 
-    return {
-      code: 200,
-      data: products,
-    };
+    return returnSuccess(products);
   } catch (error) {
     console.log(error.message);
-    return {
-      code: 500,
-      msg: error.message,
-    };
+    return returnError(500, error.message);
   }
 };
 
 const getProductById = async (id) => {
   try {
     const result = await product.findByPk(id);
-    return {
-      code: 200,
-      data: result,
-    };
+    return returnSuccess(result);
   } catch (error) {
     console.log(error.message);
-    return {
-      code: 500,
-      msg: error.message,
-    };
+    return returnError(500, error.message);
+  }
+};
+
+const addProduct = async (data) => {
+  try {
+    const {
+      userId,
+      shopId,
+      title,
+      frontImg,
+      backImg,
+      summary,
+      description,
+      sku,
+      price,
+      quantity,
+      categories,
+    } = data;
+
+    if (!userId || !shopId || !title || !description || !sku) {
+      return returnError(400, "missing information");
+    }
+
+    const result = await product.create(data, {
+      fields: [
+        "userId",
+        "shopId",
+        "title",
+        "metaTitle",
+        "slug",
+        "summary",
+        "description",
+        "frontImg",
+        "backImg",
+        "sku",
+        "price",
+      ],
+    });
+    return returnSuccess(result);
+  } catch (error) {
+    console.log(error);
+    return returnError(500, error.message);
   }
 };
 
 module.exports = {
   getProducts,
   getProductById,
+  addProduct,
 };
