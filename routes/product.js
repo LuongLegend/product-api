@@ -5,6 +5,7 @@ const {
   getProductById,
   addProduct,
 } = require("../controllers/product");
+const { verifyUser } = require("../middlewares/authentication");
 
 router.get("/", async (req, res) => {
   try {
@@ -35,7 +36,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", verifyUser, async (req, res) => {
   try {
     const data = req.body;
     const product = await addProduct(data);
