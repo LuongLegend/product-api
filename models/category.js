@@ -1,11 +1,12 @@
 const { DataTypes } = require("sequelize");
 const connectDb = require("../config/connectDB");
 
-module.exports = connectDb.define("category", {
+const Category = connectDb.define("category", {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     autoIncrement: true,
+    primaryKey: true,
   },
   title: {
     type: DataTypes.STRING(75),
@@ -18,3 +19,5 @@ module.exports = connectDb.define("category", {
   },
   content: DataTypes.TEXT,
 });
+
+module.exports = Category;

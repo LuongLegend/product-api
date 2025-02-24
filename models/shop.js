@@ -4,6 +4,7 @@ const connectDb = require("../config/connectDB");
 module.exports = connectDb.define("shop", {
   id: {
     type: DataTypes.INTEGER,
+    primaryKey: true,
     allowNull: false,
     autoIncrement: true,
   },

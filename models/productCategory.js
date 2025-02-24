@@ -1,9 +1,10 @@
 const { DataTypes } = require("sequelize");
 const connectDb = require("../config/connectDB");
 
-module.exports = connectDb.define("product_category", {
+const ProductCategory = connectDb.define("product_category", {
   id: {
     type: DataTypes.INTEGER,
+    primaryKey: true,
     allowNull: false,
     autoIncrement: true,
   },
@@ -16,3 +17,6 @@ module.exports = connectDb.define("product_category", {
     allowNull: false,
   },
 });
+
+ 
+module.exports = ProductCategory;

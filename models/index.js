@@ -14,7 +14,7 @@ product.belongsTo(user);
 shop.hasMany(product, {
   foreignKey: "shopId",
 });
-product.belongsTo(user);
+product.belongsTo(shop);
 //product-productMeta
 product.hasMany(productMeta);
 productMeta.belongsTo(product);
