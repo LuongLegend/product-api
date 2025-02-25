@@ -141,8 +141,37 @@ const addProduct = async (data) => {
   }
 };
 
+const updateProduct = async (id, data) => {
+  try {
+    const result = await product.update(data, {
+      where: {
+        id,
+      },
+      fields: [
+        "userId",
+        "shopId",
+        "title",
+        "metaTitle",
+        "slug",
+        "summary",
+        "description",
+        "frontImg",
+        "backImg",
+        "sku",
+        "price",
+        "quantity",
+      ],
+    });
+    return returnSuccess(result);
+  } catch (error) {
+    console.log(error);
+    return returnError(500, error.message);
+  }
+};
+
 module.exports = {
   getProducts,
   getProductById,
   addProduct,
+  updateProduct,
 };

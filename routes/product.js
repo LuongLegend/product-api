@@ -4,6 +4,7 @@ const {
   getProducts,
   getProductById,
   addProduct,
+  updateProduct,
 } = require("../controllers/product");
 const { verifyUser } = require("../middlewares/authentication");
 
@@ -44,6 +45,18 @@ router.post("/", verifyUser, async (req, res) => {
     return res.status(500).json({
       msg: "something wrong",
     });
+  } catch (error) {
+    console.log(error);
+    return res.status(503).json("loi roi");
+  }
+});
+
+router.put("/:id", verifyUser, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    const product = await updateProduct(id, data);
+    if (product.code === 200) return res.json({ msg: "updated success", data });
   } catch (error) {
     console.log(error);
     return res.status(503).json("loi roi");
