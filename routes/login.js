@@ -1,6 +1,6 @@
-const express = require("express");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+import express from "express";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || "12";
 const saltRounds = 10;
 
@@ -30,4 +30,4 @@ router.post("/login", (req, res) => {
   return res.json(response);
 });
 
-module.exports = router;
+export default router;

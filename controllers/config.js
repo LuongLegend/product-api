@@ -12,7 +12,4 @@ const returnError = (errCode = 500, msg = "something wrong") => {
   };
 };
 
-module.exports = {
-  returnSuccess,
-  returnError,
-};
+export { returnError, returnSuccess };

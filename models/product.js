@@ -1,7 +1,7 @@
-const { DataTypes } = require("sequelize");
-const connectDb = require("../config/connectDB");
+import { DataTypes } from "sequelize";
+import connectDb from "../config/connectDB.js";
 
-module.exports = connectDb.define(
+const product = connectDb.define(
   "products",
   {
     id: {
@@ -58,3 +58,5 @@ module.exports = connectDb.define(
     indexes: [{ unique: true, fields: ["sku"] }],
   }
 );
+
+export default product;

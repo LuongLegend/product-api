@@ -1,9 +1,9 @@
-const product = require("./product");
-const user = require("./user");
-const category = require("./category");
-const productCategory = require("./productCategory");
-const productMeta = require("./productMeta");
-const shop = require("./shop");
+import product from "./product.js";
+import user from "./user.js";
+import category from "./category.js";
+import productCategory from "./productCategory.js";
+import productMeta from "./productMeta.js";
+import shop from "./shop.js";
 //product - user
 user.hasMany(product, {
   foreignKey: "userId",
@@ -25,11 +25,4 @@ productCategory.belongsTo(product);
 category.hasMany(productCategory);
 productCategory.belongsTo(category);
 
-module.exports = {
-  user,
-  product,
-  category,
-  productCategory,
-  productMeta,
-  shop,
-};
+export { user, product, category, productCategory, productMeta, shop };

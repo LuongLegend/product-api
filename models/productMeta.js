@@ -1,7 +1,7 @@
-const { DataTypes } = require("sequelize");
-const connectDb = require("../config/connectDB");
+import { DataTypes } from "sequelize";
+import connectDb from "../config/connectDB.js";
 
-module.exports = connectDb.define("product_meta", {
+const productMeta = connectDb.define("product_meta", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -18,3 +18,5 @@ module.exports = connectDb.define("product_meta", {
   size: DataTypes.STRING(20),
   img: DataTypes.STRING(100),
 });
+
+export default productMeta;

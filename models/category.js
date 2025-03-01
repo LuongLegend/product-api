@@ -1,7 +1,7 @@
-const { DataTypes } = require("sequelize");
-const connectDb = require("../config/connectDB");
+import { DataTypes } from "sequelize";
+import connectDb from "../config/connectDB.js";
 
-const Category = connectDb.define("category", {
+const category = connectDb.define("category", {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -20,4 +20,4 @@ const Category = connectDb.define("category", {
   content: DataTypes.TEXT,
 });
 
-module.exports = Category;
+export default category;

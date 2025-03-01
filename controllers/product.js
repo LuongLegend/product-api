@@ -1,12 +1,13 @@
-const { Op } = require("sequelize");
-const {
+import { Op } from "sequelize";
+import {
   product,
   shop,
   user,
   category,
   productCategory,
-} = require("../models/index");
-const { returnSuccess, returnError } = require("./config");
+} from "../models/index.js";
+
+import { returnError, returnSuccess } from "./config.js";
 
 const getProducts = async (query) => {
   try {
@@ -169,9 +170,4 @@ const updateProduct = async (id, data) => {
   }
 };
 
-module.exports = {
-  getProducts,
-  getProductById,
-  addProduct,
-  updateProduct,
-};
+export { getProducts, getProductById, addProduct, updateProduct };

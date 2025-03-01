@@ -1,7 +1,7 @@
-const { DataTypes } = require("sequelize");
-const connectDb = require("../config/connectDB");
+import { DataTypes } from "sequelize";
+import connectDb from "../config/connectDB.js";
 
-module.exports = connectDb.define("shop", {
+const shop = connectDb.define("shop", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -15,3 +15,5 @@ module.exports = connectDb.define("shop", {
   img: DataTypes.STRING(75),
   description: DataTypes.STRING(200),
 });
+
+export default shop;

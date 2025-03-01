@@ -1,4 +1,4 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || "12";
 
 const verifyUser = (req, res, next) => {
@@ -15,6 +15,4 @@ const verifyUser = (req, res, next) => {
   }
 };
 
-module.exports = {
-  verifyUser,
-};
+export { verifyUser };

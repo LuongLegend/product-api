@@ -1,12 +1,13 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const {
+import {
   getProducts,
   getProductById,
   addProduct,
   updateProduct,
-} = require("../controllers/product");
-const { verifyUser } = require("../middlewares/authentication");
+} from "../controllers/product.js";
+
+import { verifyUser } from "../middlewares/authentication.js";
 
 router.get("/", async (req, res) => {
   try {
@@ -63,4 +64,4 @@ router.put("/:id", verifyUser, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

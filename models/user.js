@@ -1,9 +1,9 @@
-const bcrypt = require("bcrypt");
-const { DataTypes } = require("sequelize");
-const connectDb = require("../config/connectDB");
+import bcrypt from "bcrypt";
+import { DataTypes } from "sequelize";
+import connectDb from "../config/connectDB.js";
 
 const saltRounds = 10;
-module.exports = connectDb.define(
+export default connectDb.define(
   "users",
   {
     id: {
