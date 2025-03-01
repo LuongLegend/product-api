@@ -5,6 +5,7 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import "dotenv/config";
 
+import morganMiddleware from "./middlewares/winstonMiddleware.js";
 import user from "./models/user.js";
 import products from "./routes/product.js";
 import login from "./routes/login.js";
@@ -25,19 +26,21 @@ app.use(helmet());
 app.use(limiter);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morganMiddleware);
 
 app.use("/product", products);
 app.use("/user", user);
 app.use(login);
 
 app.get("/", (req, res) => {
-  console.log("hihi");
+  logger.error({
+    level: "http",
+    message: "Hello distributed log files!",
+    
+  });
   return res.json({ msg: "hello world" });
 });
 
-logger.log({
-  level: "error",
-  message: "Hello distributed log files!",
-});
+
 
 app.listen(PORT, () => console.log(`app is listening port: ${PORT}`));

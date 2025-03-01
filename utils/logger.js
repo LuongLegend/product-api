@@ -1,32 +1,33 @@
 import winston from "winston";
-import dateFormat from "dateformat";
-const now = new Date();
-const formatLocalTimezone = () => dateFormat(now, "yyyy-mm-dd HH:MM:ss");
+import "dotenv/config";
+
+const logLevel = {
+  error: 0,
+  warning: 1,
+  info: 2,
+  http: 3,
+  debug: 4,
+};
 
 const fileLogFormat = winston.format.combine(
-    winston.format.colorize(),
-    winston.format.timestamp(),
-    winston.format.align(),
-    winston.format.splat(),
-    winston.format.simple(),
-    winston.format.printf(
-        info => `${formatLocalTimezone()} ${info.level} ${info.message}`
-    )
+  winston.format.timestamp({
+    format: "HH:MM:ss DD/MM/YYYY",
+  }),
+  winston.format.align(),
+  winston.format.printf(
+    ({ level, message, timestamp, logMetadata }) =>
+      `${timestamp} [${level}] ${message} ${logMetadata || ""}`
+  )
 );
 
 const logger = winston.createLogger({
-  level: "info",
+  levels: logLevel,
+  level: process.env.LOG_LEVEL || "info",
   format: fileLogFormat,
   transports: [
-    //
-    // - Write all logs with importance level of `error` or higher to `error.log`
-    //   (i.e., error, fatal, but not other levels)
-    //
+    new winston.transports.Console(),
     new winston.transports.File({ filename: "logs/error.log", level: "error" }),
-    //
-    // - Write all logs with importance level of `info` or higher to `combined.log`
-    //   (i.e., fatal, error, warn, and info, but not trace)
-    //
+    new winston.transports.File({ filename: "logs/info.log", level: "http" }),
     new winston.transports.File({ filename: "logs/combined.log" }),
   ],
 });
