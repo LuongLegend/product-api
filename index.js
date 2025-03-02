@@ -6,6 +6,8 @@ import rateLimit from "express-rate-limit";
 import "dotenv/config";
 
 import morganMiddleware from "./middlewares/winstonMiddleware.js";
+import errorHandlingMiddleware from "./middlewares/errorHandling.js";
+
 import user from "./models/user.js";
 import products from "./routes/product.js";
 import login from "./routes/login.js";
@@ -32,15 +34,16 @@ app.use("/product", products);
 app.use("/user", user);
 app.use(login);
 
-app.get("/", (req, res) => {
-  logger.error({
-    level: "http",
-    message: "Hello distributed log files!",
-    
-  });
+app.get("/", (req, res, next) => {
+  try {
+    throw new Error("co tinh loi");
+  } catch (error) {
+    error.status = 400;
+    return next(error);
+  }
   return res.json({ msg: "hello world" });
 });
 
-
+app.use(errorHandlingMiddleware);
 
 app.listen(PORT, () => console.log(`app is listening port: ${PORT}`));
