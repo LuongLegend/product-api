@@ -14,6 +14,16 @@ export default connectDb.define(
     username: {
       type: DataTypes.STRING(40),
       allowNull: false,
+      unique: true,
+      validate: {
+        notNull: {
+          msg: "please enter username",
+        },
+        len: {
+          args: [6],
+          msg: "username must have at least 6 characters",
+        },
+      },
     },
     firstName: DataTypes.STRING(20),
     lastName: DataTypes.STRING(20),
@@ -30,6 +40,7 @@ export default connectDb.define(
     mobile: DataTypes.STRING(15),
     email: {
       type: DataTypes.STRING(50),
+      unique: true,
       validate: {
         isEmail: true,
       },
@@ -37,7 +48,7 @@ export default connectDb.define(
     avatar: DataTypes.STRING(200),
     description: DataTypes.TEXT,
     passwordHash: {
-      type: DataTypes.STRING(32),
+      type: DataTypes.STRING(100),
       allowNull: false,
       //auto hashed password before save
       set(value) {
@@ -46,9 +57,9 @@ export default connectDb.define(
     },
     type: {
       type: DataTypes.TINYINT(6),
+      defaultValue: 0,
       comment: "0: normal, 1: admin, 2: sale, 3: vender",
     },
-    registeredAt: DataTypes.INTEGER,
     lastLogin: DataTypes.INTEGER,
     intro: DataTypes.STRING(200),
     profile: DataTypes.TEXT,

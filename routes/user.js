@@ -1,13 +1,6 @@
 import express from "express";
+import { registerUser } from "../controllers/user.js";
 const router = express.Router();
-
-router.get("/", (req, res) => {
-  const u = {
-    name: "l",
-    age: 20,
-  };
-  return res.json(u);
-});
 
 router
   .route(":/id")
@@ -30,5 +23,18 @@ router
     };
     return res.json(newU);
   });
+
+router.post("/register", async (req, res, next) => {
+  try {
+    const result = await registerUser(req.body);
+    if (result && result.status === 0) {
+      return res.json({ status: 0, msg: result.msg });
+    }
+    return res.json({ status: 1, msg: "register successful" });
+  } catch (error) {
+    error.status = 400;
+    return next(error);
+  }
+});
 
 export default router;
