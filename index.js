@@ -11,6 +11,7 @@ import upload from './middlewares/upload.js';
 
 import user from './routes/user.js';
 import products from './routes/product.js';
+import category from './routes/category.js';
 import login from './routes/login.js';
 
 const PORT = process.env.PORT || 3000;
@@ -36,6 +37,7 @@ app.post('/upload', upload.single('image'), (req, res) => {
 
 app.use('/images', express.static('images'));
 app.use('/product', products);
+app.use('/category', category);
 app.use('/user', user);
 app.use(login);
 
