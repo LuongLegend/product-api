@@ -3,9 +3,14 @@ import { returnSuccess } from './config.js';
 
 const addCategory = async (data) => {
     const result = await category.create(data, {
-        fields: ['title', 'content', 'image'],
+        fields: ['title', 'content', 'image', 'slug', 'metaTitle'],
     });
     return returnSuccess(result);
 };
 
-export { addCategory };
+const getCategories = async () => {
+    const result = await category.findAll({});
+    return returnSuccess(result);
+};
+
+export { addCategory, getCategories };
