@@ -3,13 +3,30 @@ import jwt from 'jsonwebtoken';
 
 import { user } from '../models/index.js';
 import { returnError, returnSuccess } from './config.js';
+import { changeAlias } from '../utils/common.js';
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || '12';
 
-function createToken(data) {
+const createToken = (data) => {
     const token = jwt.sign(data, ACCESS_TOKEN_SECRET, { expiresIn: '30m' });
     return token;
-}
+};
+
+const getUniqueUsername = async (name) => {
+    const aliasUsername = changeAlias(name, '_');
+    while (true) {
+        const randomNumber = Math.floor(Math.random() * 1000);
+        const username = aliasUsername + randomNumber;
+        const findUser = await user.findOne({
+            where: {
+                username,
+            },
+        });
+        if (!findUser) {
+            return username;
+        }
+    }
+};
 
 const registerUser = async (data) => {
     const { username, email, password } = data;
@@ -63,7 +80,6 @@ const loginUser = async (data) => {
         return returnError(400, 'User is not found');
     }
     const { id, passwordHash } = findUser.dataValues;
-    console.log(findUser.dataValues);
     const isValidPass = bcrypt.compareSync(loginPassword, passwordHash);
     if (!isValidPass) {
         return returnError(400, 'Password is not match');
@@ -72,4 +88,47 @@ const loginUser = async (data) => {
     return returnSuccess({ token });
 };
 
-export { registerUser, loginUser };
+const loginGgUser = async (data) => {
+    const { name, picture, ggId, email } = data;
+    if (!name || !ggId || !email) return returnError(400, 'Invalid input');
+    const findUserByGgId = await user.findOne({
+        where: {
+            ggId,
+        },
+    });
+
+    if (findUserByGgId) {
+        const { id: userId, username } = findUserByGgId.dataValues;
+        const token = createToken({ userId, username, google: true });
+        return returnSuccess({ token });
+    }
+    //findUser have email not ggId -> update ggId
+    const findUserByEmail = await user.findOne({
+        where: {
+            email,
+        },
+    });
+
+    if (findUserByEmail) {
+        const { id: userId, username } = findUserByEmail.dataValues;
+        await user.update(
+            {
+                ggId,
+            },
+            {
+                where: { id: userId },
+            }
+        );
+        const token = createToken({ userId, username, google: true });
+        return returnSuccess({ token });
+    }
+    //new google login -> register
+    const uniqueUsername = await getUniqueUsername(name);
+    const newUser = { username: uniqueUsername, avatar: picture, ggId, email, passwordHash: '123', lastLogin: Date.now() };
+    const result = await user.create(newUser);
+    const { id: userId } = result.dataValues;
+    const token = createToken({ userId, username: uniqueUsername, google: true });
+    return returnSuccess({ token });
+};
+
+export { registerUser, loginUser, loginGgUser };

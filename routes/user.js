@@ -1,5 +1,5 @@
 import express from 'express';
-import { loginUser, registerUser } from '../controllers/user.js';
+import { loginGgUser, loginUser, registerUser } from '../controllers/user.js';
 const router = express.Router();
 
 router
@@ -43,10 +43,23 @@ router.post('/login', async (req, res, next) => {
         if (result && result.status === 0) {
             return res.json({ status: 0, msg: result.msg });
         }
+        const { token } = result;
+        return res.json({ status: 1, msg: 'login successful', token });
+    } catch (error) {
+        return next(error);
+    }
+});
+
+router.post('/login/gg', async (req, res, next) => {
+    try {
+        const result = await loginGgUser(req.body);
+        if (result && result.status === 0) {
+            return res.json({ status: 0, msg: result.msg });
+        }
+
         const { token } = result.data;
         return res.json({ status: 1, msg: 'login successful', token });
     } catch (error) {
-        error.status = 400;
         return next(error);
     }
 });
