@@ -13,7 +13,6 @@ import user from './routes/user.js';
 import products from './routes/product.js';
 import category from './routes/category.js';
 import shop from './routes/shop.js';
-import login from './routes/login.js';
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -41,7 +40,6 @@ app.use('/product', products);
 app.use('/category', category);
 app.use('/shop', shop);
 app.use('/user', user);
-app.use(login);
 
 app.get('/', (req, res, next) => {
     return res.json({ msg: 'hello world' });
