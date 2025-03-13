@@ -1,4 +1,4 @@
-const changeAlias = (string) => {
+const changeAlias = (string, spaceWith = '-') => {
     let str = string;
     str = str.toLowerCase();
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
@@ -11,7 +11,7 @@ const changeAlias = (string) => {
     str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\’|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, ' ');
     str = str.replace(/ + /g, ' ');
     str = str.trim();
-    str = str.replace(/ /g, '-');
+    str = str.replace(/ /g, spaceWith);
     return str;
 };
 
