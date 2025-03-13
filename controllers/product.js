@@ -79,7 +79,6 @@ const getProducts = async (query) => {
 
         return returnSuccess(products);
     } catch (error) {
-        console.log(error.message);
         return returnError(500, error.message);
     }
 };
@@ -134,8 +133,7 @@ const addProduct = async (data) => {
 
         return returnSuccess(result);
     } catch (error) {
-        console.log(error);
-        return returnError(500, error.message);
+        throw new Error(error.message);
     }
 };
 
@@ -162,7 +160,6 @@ const updateProduct = async (id, data) => {
         });
         return returnSuccess(result);
     } catch (error) {
-        console.log(error);
         return returnError(500, error.message);
     }
 };
