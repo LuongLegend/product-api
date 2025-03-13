@@ -1,5 +1,5 @@
 import { shop } from '../models/index.js';
-import { returnSuccess } from './config.js';
+import { returnSuccess } from '../utils/common.js';
 
 const addShop = async (data) => {
     const result = await shop.create(data, {

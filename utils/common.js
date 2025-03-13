@@ -1,3 +1,19 @@
+const returnSuccess = (data) => {
+    return {
+        status: 1,
+        code: 200,
+        data,
+    };
+};
+
+const returnError = (errCode = 500, msg = 'something wrong') => {
+    return {
+        status: 0,
+        code: errCode,
+        msg,
+    };
+};
+
 const changeAlias = (string, spaceWith = '-') => {
     let str = string;
     str = str.toLowerCase();
@@ -15,4 +31,4 @@ const changeAlias = (string, spaceWith = '-') => {
     return str;
 };
 
-export { changeAlias };
+export { changeAlias, returnError, returnSuccess };
