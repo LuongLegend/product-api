@@ -36,7 +36,7 @@ router.post('/', verifyUser, async (req, res, next) => {
 
         const product = await addProduct(data);
         if (product.status === 1) return res.json({ data: product.data });
-        return res.json(returnError());
+        return res.json(returnError(400, product.msg));
     } catch (error) {
         return next(error);
     }

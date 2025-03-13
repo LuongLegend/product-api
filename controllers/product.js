@@ -1,7 +1,27 @@
 import { Op } from 'sequelize';
-import { product, shop, user, category, productCategory } from '../models/index.js';
+import { product, shop, user, category, productCategory, productMeta } from '../models/index.js';
 
 import { returnError, returnSuccess } from '../utils/common.js';
+
+const addProductCategory = async (productId, categories) => {
+    for (let categoryId of categories) {
+        try {
+            await productCategory.create({ productId, categoryId });
+        } catch (error) {
+            continue;
+        }
+    }
+};
+
+const addProductMeta = async (productId, productMetas) => {
+    for (let proMeta of productMetas) {
+        try {
+            await productMeta.create({ productId, ...proMeta });
+        } catch (error) {
+            continue;
+        }
+    }
+};
 
 const getProducts = async (query) => {
     try {
@@ -107,11 +127,20 @@ const addProduct = async (data) => {
             price,
             quantity,
             categories,
-            productMeta,
+            productMeta: proMeta,
         } = data;
 
         if (!userId || !shopId || !title || !description || !sku) {
             return returnError(400, 'missing information');
+        }
+        //check sku
+        const findProductWithSku = await product.findOne({
+            where: {
+                sku,
+            },
+        });
+        if (findProductWithSku) {
+            return returnError(400, 'Sku already existed');
         }
         //add product
         const result = await product.create(data, {
@@ -130,7 +159,14 @@ const addProduct = async (data) => {
             ],
         });
         const { id: productId } = result;
-
+        //add categories
+        if (categories) {
+            addProductCategory(productId, categories);
+        }
+        //add product meta
+        if (proMeta) {
+            addProductMeta(productId, proMeta);
+        }
         return returnSuccess(result);
     } catch (error) {
         throw new Error(error.message);
