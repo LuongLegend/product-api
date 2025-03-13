@@ -92,6 +92,10 @@ const getProducts = async (query) => {
                         attributes: ['id', 'title', 'metaTitle', 'slug', 'content'],
                     },
                 },
+                {
+                    model: productMeta,
+                    attributes: ['id', 'weight', 'height', 'color', 'size', 'quantity', 'img'],
+                },
             ],
             limit,
             offset,
