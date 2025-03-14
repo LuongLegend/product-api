@@ -8,9 +8,9 @@ import { returnError } from '../utils/common.js';
 router.get('/', async (req, res, next) => {
     try {
         const query = req.query;
-        const products = await getProducts(query);
+        const result = await getProducts(query);
 
-        if (products.status === 1) return res.json({ data: products.data });
+        if (result.status === 1) return res.json(result);
         return res.json(returnError());
     } catch (error) {
         return next(error);

@@ -38,7 +38,10 @@ const product = connectDb.define(
     description: DataTypes.TEXT,
     frontImg: DataTypes.STRING(100),
     backImg: DataTypes.STRING(100),
-    status: DataTypes.TINYINT(1),
+    status: {
+      type: DataTypes.TINYINT(1),
+      defaultValue: 0,
+    },
     tags: DataTypes.STRING(100),
     type: DataTypes.TINYINT(6),
     sku: DataTypes.STRING(100),
