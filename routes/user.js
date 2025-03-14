@@ -43,7 +43,7 @@ router.post('/login', async (req, res, next) => {
         if (result && result.status === 0) {
             return res.json({ status: 0, msg: result.msg });
         }
-        const { token } = result;
+        const { token } = result.data;
         return res.json({ status: 1, msg: 'login successful', token });
     } catch (error) {
         return next(error);

@@ -7,7 +7,7 @@ const verifyUser = (req, res, next) => {
     if (!bearerHeader) return res.sendStatus(401).send("unauthorized");
     const token = bearerHeader.split(" ")[1];
     const verifyToken = jwt.verify(token, ACCESS_TOKEN_SECRET);
-    req.useInfo = verifyToken;
+    req.userInfo = verifyToken;
     return next();
   } catch (error) {
     console.log(error.message);

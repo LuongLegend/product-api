@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import connectDb from "../config/connectDB.js";
+import { changeAlias } from "../utils/common.js";
 
 const product = connectDb.define(
   "products",
@@ -20,6 +21,11 @@ const product = connectDb.define(
     title: {
       type: DataTypes.STRING(75),
       allowNull: false,
+      set(value) {
+        const alias = changeAlias(value);
+        this.setDataValue('title', value);
+        this.setDataValue('slug', alias);
+    },
     },
     metaTitle: {
       type: DataTypes.STRING(100),
@@ -32,7 +38,10 @@ const product = connectDb.define(
     description: DataTypes.TEXT,
     frontImg: DataTypes.STRING(100),
     backImg: DataTypes.STRING(100),
-    status: DataTypes.TINYINT(1),
+    status: {
+      type: DataTypes.TINYINT(1),
+      defaultValue: 0,
+    },
     tags: DataTypes.STRING(100),
     type: DataTypes.TINYINT(6),
     sku: DataTypes.STRING(100),

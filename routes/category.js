@@ -6,26 +6,18 @@ router.post('/', async (req, res, next) => {
     try {
         const data = req.body;
         const category = await addCategory(data);
-        if (category.code === 200) return res.json({ data: category.data });
-        return res.status(400).json({
-            msg: 'something wrong',
-        });
-
+        if (category.status === 1) return res.json({ data: category.data });
+        return res.json(returnError());
     } catch (error) {
-        error.status = 400;
         return next(error);
     }
 });
 
 router.get('/', async (req, res, next) => {
     try {
-
         const categories = await getCategories();
-        if (categories.code === 200) return res.json({ data: categories.data });
-        return res.status(400).json({
-            msg: 'something wrong',
-        });
-
+        if (categories.status === 1) return res.json({ data: categories.data });
+        return res.json(returnError());
     } catch (error) {
         error.status = 400;
         return next(error);

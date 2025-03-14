@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 import { user } from '../models/index.js';
-import { returnError, returnSuccess } from './config.js';
+import { returnError, returnSuccess } from '../utils/common.js';
 import { changeAlias } from '../utils/common.js';
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || '12';
@@ -45,21 +45,14 @@ const registerUser = async (data) => {
                 username,
             },
         });
-        if (findUserByUsername)
-            return {
-                status: 0,
-                msg: 'username is being used',
-            };
+        if (findUserByUsername) return returnError(400, 'username is being used');
         const findUserByEmail = await user.findOne({
             where: {
                 email,
             },
         });
-        if (findUserByEmail)
-            return {
-                status: 0,
-                msg: 'email is being used',
-            };
+        if (findUserByEmail) return returnError(400, 'email is being used');
+
         await user.create(data, { fields: ['username', 'email', 'passwordHash'] });
     } catch (err) {
         throw new Error(err.message);
@@ -124,7 +117,14 @@ const loginGgUser = async (data) => {
     }
     //new google login -> register
     const uniqueUsername = await getUniqueUsername(name);
-    const newUser = { username: uniqueUsername, avatar: picture, ggId, email, passwordHash: '123', lastLogin: Date.now() };
+    const newUser = {
+        username: uniqueUsername,
+        avatar: picture,
+        ggId,
+        email,
+        passwordHash: '123',
+        lastLogin: Date.now(),
+    };
     const result = await user.create(newUser);
     const { id: userId } = result.dataValues;
     const token = createToken({ userId, username: uniqueUsername, google: true });

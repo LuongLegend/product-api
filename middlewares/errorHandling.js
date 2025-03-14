@@ -18,6 +18,8 @@ const errorHandlingMiddleware = (err, req, res, next) => {
     statusCode,
     path: req.path,
     method: req.method,
+    data: req.body,
+    userId: req.userInfo ? req.userInfo.userId : 'null'
   });
   if (err) {
     return res.status(statusCode).send(messRes);
