@@ -3,16 +3,20 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import { Socket } from "socket.io";
+
 import 'dotenv/config';
 
 import morganMiddleware from './middlewares/winstonMiddleware.js';
 import errorHandlingMiddleware from './middlewares/errorHandling.js';
 import upload from './middlewares/upload.js';
+import { verifyUser } from './middlewares/authentication.js';
 
 import user from './routes/user.js';
 import products from './routes/product.js';
 import category from './routes/category.js';
 import shop from './routes/shop.js';
+import cart from './routes/cart.js';
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -40,6 +44,7 @@ app.use('/product', products);
 app.use('/category', category);
 app.use('/shop', shop);
 app.use('/user', user);
+app.use('/cart', verifyUser, cart);
 
 app.get('/', (req, res, next) => {
     return res.json({ msg: 'hello world' });

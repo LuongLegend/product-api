@@ -19,6 +19,10 @@ const cart = connectDb.define(
             allowNull: false,
         },
         productMetaId: { type: DataTypes.INTEGER, allowNull: false },
+        quantity: {
+            type: DataTypes.INTEGER,
+            defaultValue: 1,
+        },
     },
     {
         indexes: [
@@ -31,5 +35,4 @@ const cart = connectDb.define(
         ],
     }
 );
-
 export default cart;

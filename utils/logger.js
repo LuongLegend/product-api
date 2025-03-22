@@ -16,7 +16,6 @@ const fileLogFormat = winston.format.combine(
     winston.format.align(),
     winston.format.printf(
         ({ level, message, timestamp, logMetadata, statusCode = 500, path, method, data, userId }) => {
-            console.log(data);
             if (level === 'http') return `${timestamp} [${level}] ${message}`;
             return `${timestamp} [${level}][${statusCode}] [${method}]${path} | ${message} ${logMetadata || ''} ${
                 userId && `userId: ${userId} `
