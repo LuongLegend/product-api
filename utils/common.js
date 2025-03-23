@@ -1,8 +1,9 @@
-const returnSuccess = (data) => {
+const returnSuccess = (data, msg = 'Successfully!') => {
     return {
         status: 1,
         code: 200,
         data,
+        msg,
     };
 };
 
