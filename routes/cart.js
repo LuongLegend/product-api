@@ -1,14 +1,24 @@
 import express from 'express';
-import { addCart, removeCart, getCart } from '../controllers/cart.js';
+import { addCart, removeCart, getCart, updateCart } from '../controllers/cart.js';
+import { cartMetaIdValidator, cartValidator } from '../validator/cart.js';
+import { validationResult } from 'express-validator';
+import { returnError } from '../utils/common.js';
+
 const router = express.Router();
 
-router.post('/:productId', async (req, res, next) => {
+router.post('/:productId', cartValidator, async (req, res, next) => {
     try {
         const { productId } = req.params;
+        const checkInput = validationResult(req);
+        if (!checkInput.isEmpty()) {
+            return res.json(returnError(400, 'invalid input'));
+        }
 
-        const data = req.body;
-        data.productId = productId;
-        data.userId = req.userInfo.userId;
+        const data = {
+            ...req.body,
+            productId,
+            userId: req.userInfo.userId,
+        };
 
         const result = await addCart(data);
         return res.json(result);
@@ -17,7 +27,22 @@ router.post('/:productId', async (req, res, next) => {
     }
 });
 
-router.delete('/:productId', async (req, res, next) => {
+router.put('/:productId',cartValidator, async (req, res, next) => {
+    try {
+        const { productId } = req.params;
+
+        const data = req.body;
+        data.productId = productId;
+        data.userId = req.userInfo.userId;
+
+        const result = await updateCart(data);
+        return res.json(result);
+    } catch (error) {
+        return next(error);
+    }
+});
+
+router.delete('/:productId',cartMetaIdValidator, async (req, res, next) => {
     try {
         const { productId } = req.params;
 

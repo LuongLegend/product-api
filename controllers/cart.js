@@ -7,8 +7,7 @@ const findCart = async ({ userId, productId, productMetaId }) => {
 };
 const addCart = async (data) => {
     const cartExisted = await findCart(data);
-    const { productMetaId, quantity } = data;
-    if (!quantity || !productMetaId) return returnError(400, 'Invalid input');
+    const { quantity } = data;
 
     if (cartExisted) {
         const result = await cartExisted.increment({ quantity });
@@ -25,12 +24,21 @@ const removeCart = async (data) => {
     if (!productMetaId) return returnError(400, 'Invalid input');
     const cartExisted = await findCart(data);
     if (!cartExisted) return returnError(500, 'Cart is not existed!');
-    if (quantity) {
+    if (quantity && quantity < cartExisted.dataValues.quantity) {
         await cartExisted.decrement({ quantity });
         return returnSuccess({}, 'decrement successfully!');
     }
     await cartExisted.destroy();
     return returnSuccess({}, 'Remove successfully!');
+};
+
+const updateCart = async (data) => {
+    const { quantity } = data;
+    const cartExisted = await findCart(data);
+    if (!cartExisted) return returnError(500, 'Cart is not existed!');
+   
+    await cartExisted.update({ quantity });
+    return returnSuccess({}, 'Update successfully!');
 };
 
 const getCart = async (userId) => {
@@ -42,4 +50,4 @@ const getCart = async (userId) => {
     return returnSuccess(result);
 };
 
-export { addCart, removeCart, getCart };
+export { addCart, removeCart, getCart, updateCart };
